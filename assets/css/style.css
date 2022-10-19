@@ -3,6 +3,19 @@
     --light: #6991E3;
     --dark: #261360;
     --forecast: #323D4F;
+    --search-results: #AEAEAE;
+}
+
+input{
+  width: 100%;
+}
+
+label {
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 0.5rem 0;
 }
 
 .jumbotron {
@@ -18,17 +31,6 @@
   margin: 1rem 0;
 }
 
-input{
-  width: 100%;
-}
-
-label {
-  font-size: 1.5rem;
-}
-
-h2 {
-  margin: 0.5rem 0;
-}
   
   /* .forecast-card {
     background-color: var(--forecast);
