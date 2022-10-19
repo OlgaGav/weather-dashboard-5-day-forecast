@@ -6,26 +6,32 @@ var parameters = "&units=imperial&appid=9c3cdb77bb5831702f9fec737b8d4601";
 var searchButtonEl = document.getElementById("search-button");
 var searchInputEl = document.getElementById("search-city");
 var searchResultsEl = document.getElementById("dashboard");
+var searchHistoryEl = document.getElementById("search-history");
+var searchHistory;
 var iconLink1 = "https://openweathermap.org/img/wn/"
 var iconLink2 = ".png";
 // var iconLargeLink2 = "@2x.png";
 
+searchResultsEl.innerHTML="";
+searchInputEl.value="";
+renderCitiesFromSearchHistory();
+
 searchButtonEl.addEventListener('click', function() {
     var cityName = searchInputEl.value;
-    showWeatherForecastFor(cityName);
+    cityName.trim();
+    if (cityName.length>0){
+      showWeatherForecastFor(cityName);
+    }
 })
 
 function showWeatherForecastFor(cityName) {
-  if (cityName.length===0 || cityName.length===undefined || cityName.length===null) {
-    return;
-  } else {
-    cityName = encodeURIComponent(cityName);
-  }
-  var weatherUrl = baseWeatherUrl+"?q="+cityName+parameters;
-  var forecastUrl = baseForecastUrl+"?q="+cityName+parameters;
+  searchInputEl.value = "";
   searchResultsEl.innerHTML = "";
+  var weatherUrl = baseWeatherUrl+"?q="+encodeURIComponent(cityName)+parameters;
+  var forecastUrl = baseForecastUrl+"?q="+encodeURIComponent(cityName)+parameters;
   showWeather(weatherUrl);
   showForecast(forecastUrl);
+  addToHistory(cityName);
 }
 
 function showWeather(weatherUrl) {
@@ -107,7 +113,7 @@ function showForecast(forecastUrl){
             var forecastIconUrl = iconLink1+iconId+iconLink2;
             var temp = data.list[i].main.temp;
             var windSpeed = data.list[i].wind.speed;
-            var humidity = data.list[i].weather[0].main.humidity;
+            var humidity = data.list[i].main.humidity;
             
             var forecastCardEl = document.createElement("div");
             forecastCardEl.className = "card";
@@ -145,4 +151,37 @@ function showForecast(forecastUrl){
             forecastCardBodyEl.appendChild(forecastCardHumEl);
         }
     })
+}
+
+function addToHistory(cityName) {
+  searchHistory = JSON.parse(localStorage.getItem("weather-search-history"));
+  if (searchHistory===null){
+    searchHistory = [];
+  }
+  if (searchHistory.indexOf(cityName) !== -1) {
+    return;
+  }
+    searchHistory.unshift(cityName);
+    localStorage.setItem("weather-search-history", JSON.stringify(searchHistory));
+    renderCitiesFromSearchHistory(); 
+}
+
+function renderCitiesFromSearchHistory() {
+  searchHistoryEl.innerHTML="";
+  searchHistory = JSON.parse(localStorage.getItem("weather-search-history"));
+  if (searchHistory===null){
+    return;
+  } 
+  for (var j=0; j<searchHistory.length; j++) {
+    var searchHistoryCity = document.createElement("a");
+    searchHistoryCity.className = "btn btn-city";
+    searchHistoryCity.setAttribute("name", searchHistory[j]);
+    searchHistoryCity.textContent = searchHistory[j];
+    searchHistoryEl.appendChild(searchHistoryCity);
+
+    searchHistoryCity.addEventListener('click', function(){
+        let city = this.getAttribute("name");
+        showWeatherForecastFor(city);
+        });
+  }
 }
