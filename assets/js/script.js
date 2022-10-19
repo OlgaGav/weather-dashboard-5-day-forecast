@@ -1,21 +1,14 @@
 // weather API url https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 // api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-var baseWeatherUrl = "https://api.openweathermap.org/data/2.5/weather"
-var baseForecastUrl = "https://api.openweathermap.org/data/2.5/forecast"
-var apiKey = "9c3cdb77bb5831702f9fec737b8d4601";
-var parameters = "&units=imperial&appid="+apiKey;
+var baseWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
+var baseForecastUrl = "https://api.openweathermap.org/data/2.5/forecast";
+var parameters = "&units=imperial&appid=9c3cdb77bb5831702f9fec737b8d4601";
 var searchButtonEl = document.getElementById("search-button");
 var searchInputEl = document.getElementById("search-city");
 var searchResultsEl = document.getElementById("dashboard");
 var iconLink1 = "https://openweathermap.org/img/wn/"
-// var iconLink2 = "@2x.png";
 var iconLink2 = ".png";
-
-// these urls used for test purpose only in development
-var testForecastUrl = "https://api.openweathermap.org/data/2.5/forecast?q=Chico&units=imperial&appid=9c3cdb77bb5831702f9fec737b8d4601"
-var testWeatherUrl = "https://api.openweathermap.org/data/2.5/weather?q=Chico&units=imperial&appid=9c3cdb77bb5831702f9fec737b8d4601"
-// will be deleted
-
+// var iconLargeLink2 = "@2x.png";
 
 searchButtonEl.addEventListener('click', function() {
     var cityName = searchInputEl.value;
