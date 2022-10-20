@@ -18,6 +18,19 @@ h2 {
   margin: 0.5rem 0;
 }
 
+.card-forecast{
+  background-color: var(--forecast);
+  color: white;
+  
+}
+
+.card-weather {
+  border: black;
+  border-style: solid;
+  border-width: 0.3rem;
+  margin: 2rem 0;
+}
+
 .jumbotron {
     text-align: center;
     background: linear-gradient(to right, var(--medium), var(--dark));
@@ -30,6 +43,10 @@ h2 {
 .btn {
   width: 100%;
   margin: 1rem 0;
+}
+
+.btn-primary {
+  background-color: var(--light);
 }
 
 #search-history {

@@ -1,18 +1,24 @@
-// weather API url https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-// api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+// openweather API 
+// https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
+// https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
 var baseWeatherUrl = "https://api.openweathermap.org/data/2.5/weather";
 var baseForecastUrl = "https://api.openweathermap.org/data/2.5/forecast";
 var parameters = "&units=imperial&appid=9c3cdb77bb5831702f9fec737b8d4601";
 var searchButtonEl = document.getElementById("search-button");
 var searchInputEl = document.getElementById("search-city");
-var searchResultsEl = document.getElementById("dashboard");
+var searchResultsWEl = document.getElementById("weather-area");
+var searchResultsFEl = document.getElementById("forecast-area");
+
 var searchHistoryEl = document.getElementById("search-history");
 var searchHistory;
 var iconLink1 = "https://openweathermap.org/img/wn/"
 var iconLink2 = ".png";
 // var iconLargeLink2 = "@2x.png";
 
-searchResultsEl.innerHTML="";
+searchResultsWEl.innerHTML="";
+searchResultsFEl.innerHTML="";
+
 searchInputEl.value="";
 renderCitiesFromSearchHistory();
 
@@ -26,13 +32,17 @@ searchButtonEl.addEventListener('click', function() {
 
 function showWeatherForecastFor(cityName) {
   searchInputEl.value = "";
-  searchResultsEl.innerHTML = "";
+  searchResultsWEl.innerHTML="";
+  searchResultsFEl.innerHTML="";
+
   var weatherUrl = baseWeatherUrl+"?q="+encodeURIComponent(cityName)+parameters;
   var forecastUrl = baseForecastUrl+"?q="+encodeURIComponent(cityName)+parameters;
   showWeather(weatherUrl);
   showForecast(forecastUrl);
   addToHistory(cityName);
 }
+
+
 
 function showWeather(weatherUrl) {
     fetch(weatherUrl)
@@ -41,6 +51,7 @@ function showWeather(weatherUrl) {
             return(response.json())
         } else {
             throw new Error ("Invalid Weather URL or service doesn't respond");
+            return;
         }
     })
     .then(function(data){
@@ -53,7 +64,7 @@ function showWeather(weatherUrl) {
         var humidity = data.main.humidity;
 
         var weatherCard = document.createElement("div");
-        weatherCard.className = "card";
+        weatherCard.className = "card card-weather";
 
         var weatherCardBody = document.createElement("div");
         weatherCardBody.className = "card-body";
@@ -77,8 +88,8 @@ function showWeather(weatherUrl) {
         var humidityEl = document.createElement("p");
         humidityEl.className = "card-text";
         humidityEl.textContent = "Humidity: "+humidity+" %";
-
-        searchResultsEl.appendChild(weatherCard);
+        
+        searchResultsWEl.appendChild(weatherCard);
         weatherCard.appendChild(weatherCardBody);
         weatherCardBody.appendChild(weatherCardHeader);
         document.getElementById("weatherIcon").appendChild(iconEl);
@@ -95,6 +106,7 @@ function showForecast(forecastUrl){
             return response.json();
         } else {
             throw new Error ("Invalid Forecast URL or service doesn't respond");
+            return;
         }
     })
     .then(function(data){
@@ -102,10 +114,9 @@ function showForecast(forecastUrl){
         var forecastCardGroupHeaderEl = document.createElement("h3");
         forecastCardGroupHeaderEl.textContent = "5-Day Forecast:";
         var forecastCardGroupEl = document.createElement("div");
-        forecastCardGroupEl.className = "card-group";
-        // forecastCardGroupEl.setAttribute = ("id","forecast-group");
-        searchResultsEl.appendChild(forecastCardGroupHeaderEl);
-        searchResultsEl.appendChild(forecastCardGroupEl);
+        forecastCardGroupEl.className = "card-deck";
+        searchResultsFEl.appendChild(forecastCardGroupHeaderEl);
+        searchResultsFEl.appendChild(forecastCardGroupEl);
 
         for (var i=5; i<40; i=i+8) {
             var forDate = new Date(data.list[i].dt*1000).toLocaleDateString("en-US");
@@ -116,7 +127,7 @@ function showForecast(forecastUrl){
             var humidity = data.list[i].main.humidity;
             
             var forecastCardEl = document.createElement("div");
-            forecastCardEl.className = "card";
+            forecastCardEl.className = "card card-forecast";
     
             var forecastCardBodyEl = document.createElement("div");
             forecastCardBodyEl.className = "card-body";
@@ -132,7 +143,7 @@ function showForecast(forecastUrl){
             
             var forecastCardTempEl = document.createElement("p");
             forecastCardTempEl.className = "card-text";
-            forecastCardTempEl.textContent = "Temp:"+temp+"°F";
+            forecastCardTempEl.textContent = "Temp: "+temp+"°F";
 
             var forecastCardWindEl = document.createElement("p");
             forecastCardWindEl.className = "card-text";
