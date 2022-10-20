@@ -75,3 +75,59 @@ h2 {
 .btn-city:hover {
   cursor: pointer;
 }
+
+/* 769px — 1024px: Small screens, laptops */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+
+  #dashboard {
+    -ms-flex: 0 0 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+
+  .card-deck .card {
+    flex: 0 1 15rem;
+    margin: 1rem;
+  }
+}
+
+/* 481px — 768px: iPads, Tablets */
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  #widget {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #nav {
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  #dashboard {
+    -ms-flex: 0 0 80%;
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+
+  .card-deck .card {
+    flex: 0 1 15rem;
+    margin: 1rem;
+  }
+}
+
+
+/* 320px — 480px: Mobile devices */
+@media only screen and (max-width: 480px) {
+  #widget {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #nav,
+  #dashboard {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
