@@ -21,26 +21,28 @@
     </div>
   </header>
   
-  <div class="row container-fluid">
-  <!-- left-hand side section for search and search-results -->
-    <section class="col-2">
-        <div class="form-group">
-          <label for="search-city">Search for a City:</label>
-          <input type="text" id="search-city" name="search-city" placeholder="Enter city ...">
-          <button class="btn btn-primary" id="search-button">Search</button>
-        </div>
-        <hr>
-        <div id="search-history"></div>
-      </section>
-      <!-- main section for weather dashboard, generated dynamically based on search request -->
-      <section class="col-9" id="dashboard">
-        <!-- div is used to show big card with weather for today -->
-        <div id="weather-area"></div>
-        <!-- div is used to show 5 days forecast cards -->
-        <div id="forecast-area"></div>
-      </section>
+  <div class="container-fluid">
+    <div class="row" id="widget">
+          <!-- left-hand side section for search and search-results -->
+    <section class="col-2" id="nav">
+      <div class="form-group">
+        <label for="search-city">Search for a City:</label>
+        <input type="text" id="search-city" name="search-city" placeholder="Enter city ...">
+        <button class="btn btn-primary" id="search-button">Search</button>
+      </div>
+      <hr>
+      <div id="search-history"></div>
+    </section>
+    <!-- main section for weather dashboard, generated dynamically based on search request -->
+    <section class="col-9" id="dashboard">
+      <!-- div is used to show big card with weather for today -->
+      <div id="weather-area"></div>
+      <!-- div is used to show 5 days forecast cards -->
+      <div id="forecast-area"></div>
+    </section>
+    </div>
   </div>
-  </body>
+</body>
 
   <script tyep="text/javascript" src="assets/js/script.js"></script>    
 </body>
