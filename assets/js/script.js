@@ -39,9 +39,7 @@ function showWeatherForecastFor(cityName) {
   var forecastUrl = baseForecastUrl+"?q="+encodeURIComponent(cityName)+parameters;
   showWeather(weatherUrl);
   showForecast(forecastUrl);
-  addToHistory(cityName);
 }
-
 
 
 function showWeather(weatherUrl) {
@@ -63,39 +61,18 @@ function showWeather(weatherUrl) {
         var windSpeed = data.wind.speed;
         var humidity = data.main.humidity;
 
-        var weatherCard = document.createElement("div");
-        weatherCard.className = "card card-weather";
+        var cityWeatherObject = {
+            "city" : cityName,
+            "country" : country,
+            "date": dateMain,
+            "icon": iconId,
+            "temp": temp,
+            "wind": windSpeed,
+            "humidity": humidity,
+        }
 
-        var weatherCardBody = document.createElement("div");
-        weatherCardBody.className = "card-body";
-
-        var weatherCardHeader = document.createElement("h4");
-        weatherCardHeader.className = "card-title";
-        weatherCardHeader.innerHTML = cityName+", "+country+" ("+dateMain+") "+"<span id='weatherIcon'></span>";
-
-        // get icon for current weather and add to the element
-        var weatherIconUrl = iconLink1+iconId+iconLink2;
-        var iconEl = document.createElement("img");
-        iconEl.setAttribute("src", weatherIconUrl);
-        iconEl.setAttribute("alt", "icon to show the weather, generated dynamically based on the current weather");
-
-        var tempEl = document.createElement("p");
-        tempEl.className = "card-text";
-        tempEl.textContent = "Temp: "+temp+"°F";
-        var windEl = document.createElement("p");
-        windEl.className = "card-text";
-        windEl.textContent = "Wind: "+windSpeed+" MPH"
-        var humidityEl = document.createElement("p");
-        humidityEl.className = "card-text";
-        humidityEl.textContent = "Humidity: "+humidity+" %";
-        
-        searchResultsWEl.appendChild(weatherCard);
-        weatherCard.appendChild(weatherCardBody);
-        weatherCardBody.appendChild(weatherCardHeader);
-        document.getElementById("weatherIcon").appendChild(iconEl);
-        weatherCardBody.appendChild(tempEl);
-        weatherCardBody.appendChild(windEl);
-        weatherCardBody.appendChild(humidityEl);
+        renderWeather(cityWeatherObject);
+        addToHistory(cityName);
     })
 }
 
@@ -110,7 +87,6 @@ function showForecast(forecastUrl){
         }
     })
     .then(function(data){
-
         var forecastCardGroupHeaderEl = document.createElement("h3");
         forecastCardGroupHeaderEl.textContent = "5-Day Forecast:";
         var forecastCardGroupEl = document.createElement("div");
@@ -195,4 +171,42 @@ function renderCitiesFromSearchHistory() {
         showWeatherForecastFor(city);
         });
   }
+}
+
+function renderWeather(cityData) {
+    searchResultsWEl.innerHTML="";
+
+    var weatherCard = document.createElement("div");
+    weatherCard.className = "card card-weather";
+
+    var weatherCardBody = document.createElement("div");
+    weatherCardBody.className = "card-body";
+
+    var weatherCardHeader = document.createElement("h4");
+    weatherCardHeader.className = "card-title";
+    weatherCardHeader.innerHTML = cityData.city+", "+cityData.country+" ("+cityData.date+") "+"<span id='weatherIcon'></span>";
+
+    // get icon for current weather and add to the element
+    var weatherIconUrl = iconLink1+cityData.icon+iconLink2;
+    var iconEl = document.createElement("img");
+    iconEl.setAttribute("src", weatherIconUrl);
+    iconEl.setAttribute("alt", "icon to show the weather, generated dynamically based on the current weather");
+
+    var tempEl = document.createElement("p");
+    tempEl.className = "card-text";
+    tempEl.textContent = "Temp: "+cityData.temp+"°F";
+    var windEl = document.createElement("p");
+    windEl.className = "card-text";
+    windEl.textContent = "Wind: "+cityData.wind+" MPH"
+    var humidityEl = document.createElement("p");
+    humidityEl.className = "card-text";
+    humidityEl.textContent = "Humidity: "+cityData.humidity+" %";
+
+    searchResultsWEl.appendChild(weatherCard);
+    weatherCard.appendChild(weatherCardBody);
+    weatherCardBody.appendChild(weatherCardHeader);
+    document.getElementById("weatherIcon").appendChild(iconEl);
+    weatherCardBody.appendChild(tempEl);
+    weatherCardBody.appendChild(windEl);
+    weatherCardBody.appendChild(humidityEl);
 }
