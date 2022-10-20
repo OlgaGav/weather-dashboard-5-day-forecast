@@ -198,7 +198,11 @@ function renderForecast(forecastData) {
   searchResultsFEl.appendChild(forecastCardGroupHeaderEl);
   searchResultsFEl.appendChild(forecastCardGroupEl);
   // start with 7th to show the weather in the midddle of the day as more relevant for travelling
-  for (var i=7; i<40; i=i+8) {
+  for (var i=1; i<40; i=i+1) {
+    // forecast provide data for every 3h, so we'll display weather at noon
+    let checkTime = forecastData[i].dt_txt;
+    if (checkTime.includes("12:00:00")) {
+      console.log(checkTime);
       var forDate = new Date(forecastData[i].dt*1000).toLocaleDateString("en-US");
       var iconId = forecastData[i].weather[0].icon;
       var forecastIconUrl = iconBaseUrl+iconId+iconLExt;
@@ -240,5 +244,6 @@ function renderForecast(forecastData) {
       forecastCardBodyEl.appendChild(forecastCardTempEl);
       forecastCardBodyEl.appendChild(forecastCardWindEl);
       forecastCardBodyEl.appendChild(forecastCardHumEl);
+    }
   }
 }
