@@ -1,4 +1,4 @@
-// openweather API 
+// openweather API used in the application:
 // https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 // https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
@@ -11,19 +11,23 @@ var searchResultsWEl = document.getElementById("weather-area");
 var searchResultsFEl = document.getElementById("forecast-area");
 var searchHistoryEl = document.getElementById("search-history");
 var searchHistory;
-var iconLink1 = "https://openweathermap.org/img/wn/"
-var iconLink2 = ".png";
-// var iconLargeLink2 = "@2x.png";
+var iconBaseUrl = "https://openweathermap.org/img/wn/"
+// small icon extension
+var iconSExt = ".png";
+// large icon extension
+var iconLExt = "@2x.png";
 
-// clear search field, search results area
+// clear search field, search results area on load
 searchResultsWEl.innerHTML="";
 searchResultsFEl.innerHTML="";
 searchInputEl.value="";
+// upload cities from previous search if the are in the localStorage do display the in the left hand side pane
 searchHistory = JSON.parse(localStorage.getItem("weather-search-history"));
 if (searchHistory!==null){
   renderCitiesFromSearchHistory();
 }
 
+// event listener when user click search button
 searchButtonEl.addEventListener('click', function() {
     let cityNameSearch = searchInputEl.value;
     cityNameSearch.trim();
@@ -32,19 +36,16 @@ searchButtonEl.addEventListener('click', function() {
     }
 })
 
-// https://www.w3schools.com/howto/howto_js_trigger_button_enter.asp
-// Execute a function when the user presses a key on the keyboard
+// Add event listener on input field if user presses enter key on the keyboard to initiate search
 searchInputEl.addEventListener("keypress", function(event) {
   // If the user presses the "Enter" key on the keyboard
   if (event.key === "Enter") {
-    // Cancel the default action, if needed
-    event.preventDefault();
-    // Trigger the button element with a click
+    // Trigger the 'Search' button element with a click
     searchButtonEl.click();
   }
 });
 
-// function to show search results for city
+// function to show Dashboard with current weather and forecast for city from search
 function showWeatherForecastFor(cityName) {
   // clear the previous results if any
   searchInputEl.value = "";
@@ -87,8 +88,9 @@ function showWeather(weatherUrl) {
             "wind": windSpeed,
             "humidity": humidity,
         }
-
+        // display weather on the dashboard
         renderWeather(cityWeatherObject);
+        // add the city to the search history
         addToHistory(cityName);
     })
 }
@@ -105,7 +107,6 @@ function showForecast(forecastUrl){
         }
     })
     .then(function(data){
-      console.log("data.list: ", data.list);
       renderForecast(data.list);
     })
 }
@@ -126,7 +127,7 @@ function addToHistory(cityName) {
     renderCitiesFromSearchHistory(); 
 }
 
-// rendering cities from localStorage if any on the left hand side pane
+// rendering cities from localStorage if any
 function renderCitiesFromSearchHistory() {
   searchHistoryEl.innerHTML="";
   searchHistory = JSON.parse(localStorage.getItem("weather-search-history"));
@@ -139,7 +140,7 @@ function renderCitiesFromSearchHistory() {
     searchHistoryCity.setAttribute("name", searchHistory[j]);
     searchHistoryCity.textContent = searchHistory[j];
     searchHistoryEl.appendChild(searchHistoryCity);
-
+    // event listener on the element with city name to display the weather for the city from the search history on click
     searchHistoryCity.addEventListener('click', function(){
         let city = this.getAttribute("name");
         showWeatherForecastFor(city);
@@ -147,7 +148,7 @@ function renderCitiesFromSearchHistory() {
   }
 }
 
-// redndering card with weather for today
+// rendering card with weather for today
 function renderWeather(weatherTodayData) {
     searchResultsWEl.innerHTML="";
 
@@ -162,7 +163,7 @@ function renderWeather(weatherTodayData) {
     weatherCardHeader.innerHTML = weatherTodayData.city+", "+weatherTodayData.country+" ("+weatherTodayData.date+") "+"<span id='weatherIcon'></span>";
 
     // get icon for current weather and add to the element
-    var weatherIconUrl = iconLink1+weatherTodayData.icon+iconLink2;
+    var weatherIconUrl = iconBaseUrl+weatherTodayData.icon+iconLExt;
     var iconEl = document.createElement("img");
     iconEl.setAttribute("src", weatherIconUrl);
     iconEl.setAttribute("alt", "icon to show the weather, generated dynamically based on the current weather");
@@ -196,11 +197,11 @@ function renderForecast(forecastData) {
   forecastCardGroupEl.className = "card-deck";
   searchResultsFEl.appendChild(forecastCardGroupHeaderEl);
   searchResultsFEl.appendChild(forecastCardGroupEl);
-
-  for (var i=5; i<40; i=i+8) {
+  // start with 7th to show the weather in the midddle of the day as more relevant for travelling
+  for (var i=7; i<40; i=i+8) {
       var forDate = new Date(forecastData[i].dt*1000).toLocaleDateString("en-US");
       var iconId = forecastData[i].weather[0].icon;
-      var forecastIconUrl = iconLink1+iconId+iconLink2;
+      var forecastIconUrl = iconBaseUrl+iconId+iconLExt;
       var temp = forecastData[i].main.temp;
       var windSpeed = forecastData[i].wind.speed;
       var humidity = forecastData[i].main.humidity;
