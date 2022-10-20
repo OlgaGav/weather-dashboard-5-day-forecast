@@ -46,7 +46,8 @@ h2 {
 }
 
 .btn-primary {
-  background-color: var(--light);
+  background-color: var(--medium);
+  border-color: var(--medium);
 }
 
 #search-history {
